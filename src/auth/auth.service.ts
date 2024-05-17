@@ -19,9 +19,10 @@ export class AuthService {
   ) {}
   async register(dto: AuthDto) {
     //check user if user not exist throw error credentials not matched
-    const checkUser = this.userService.findUserByEmail(dto.email);
+    const checkUser = await this.userService.findUserByEmail(dto.email);
     //hash the password
     const hashPassword = await hash(dto.password);
+    console.log(checkUser)
     //if user exist then register the user
     if (checkUser) throw new ConflictException('Invalid Credentials');
     const registerUser = this.prisma.user.create({
@@ -71,4 +72,5 @@ export class AuthService {
     }
     throw new UnauthorizedException('Invalid Credentials');
   }
+  
 }

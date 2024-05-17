@@ -42,4 +42,18 @@ export class UserService {
       throw new error(error);
     }
   }
+
+  async findUserById(userId: number) {
+    try {
+      const userExist = await this.prismaService.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+      if (!userExist) throw new NotFoundException;
+      return userExist;
+    } catch (error) {
+      throw new ForbiddenException(error);
+    }
+  }
 }
