@@ -12,11 +12,13 @@ async function bootstrap() {
     }),
   );
 
+
   const config = new DocumentBuilder()
     .setTitle('Fullstack authentication')
     .setDescription('Full proof authentication')
     .setVersion('1.0')
     .addTag('Authentication')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

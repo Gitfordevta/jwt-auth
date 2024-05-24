@@ -1,8 +1,11 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from './dto';
 import { UserService } from './user.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller('user')
 @ApiTags('Users')
 export class UserController {
@@ -14,6 +17,6 @@ export class UserController {
 
   @Get('profile/:userId')
   async getUserProfile(@Param('userId') userId: number) {
-    return this.userService.findUserById(userId)
+    return this.userService.findUserById(userId);
   }
 }
