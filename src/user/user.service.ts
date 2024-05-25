@@ -51,6 +51,7 @@ export class UserService {
         },
       });
       if (!userExist) throw new NotFoundException;
+      delete userExist.password
       return userExist;
     } catch (error) {
       throw new ForbiddenException(error);
