@@ -22,7 +22,7 @@ export class AuthService {
     const checkUser = await this.userService.findUserByEmail(dto.email);
     //hash the password
     const hashPassword = await hash(dto.password);
-    console.log(checkUser)
+    console.log(checkUser);
     //if user exist then register the user
     if (checkUser) throw new ConflictException('Invalid Credentials');
     const registerUser = this.prisma.user.create({
@@ -48,12 +48,12 @@ export class AuthService {
         user,
         backendToken: {
           accessToken: await this.jwtService.signAsync(payload, {
-            expiresIn: '1h',
+            expiresIn: '20s',
             secret: process.env.JWT_SECERET_KEY,
           }),
           refreshToken: await this.jwtService.signAsync(payload, {
             expiresIn: '7d',
-            secret: process.env.JWT_SECERET_KEY,
+            secret: process.env.JWT_REFERESH_KEY,
           }),
         },
       };
@@ -72,5 +72,21 @@ export class AuthService {
     }
     throw new UnauthorizedException('Invalid Credentials');
   }
-  
+  async refreshToken(user: any) {
+    const payload = {
+      username: user.username,
+      sub: user.sub,
+    };
+
+    return {
+      accessToken: await this.jwtService.signAsync(payload, {
+        expiresIn: '20s',
+        secret: process.env.JWT_SECERET_KEY,
+      }),
+      refreshToken: await this.jwtService.signAsync(payload, {
+        expiresIn: '7d',
+        secret: process.env.JWT_REFERESH_KEY,
+      }),
+    };
+  }
 }

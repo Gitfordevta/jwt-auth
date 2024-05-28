@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthDto } from './dto';
 import { AuthService } from './auth.service';
@@ -18,7 +18,8 @@ export class AuthController {
   }
   @UseGuards(RefreshJwtGuard)
   @Post('refresh')
-  async getToken(@Body() dto: AuthDto) {
-    return await this.authService.login(dto);
+  async getToken(@Request() req) {
+    // console.log(req);
+    return await this.authService.refreshToken(req);
   }
 }
